@@ -27,7 +27,7 @@ class Sensor {
     }
   }
 
-  #getReading(ray, roadBorders) {
+  #getReading(ray, roadBorders, traffic) {
     let touches = []
 
     for (let i = 0; i < roadBorders.length; ++i) {
@@ -42,6 +42,21 @@ class Sensor {
       }
     }
 
+    for (let i = 0; i < traffic.length; ++i) {
+      const polygon = traffic[i].polygon
+      for (let j = 0; j < polygon.length; ++j) {
+        const value = getIntersection(
+          ray[0],
+          ray[1],
+          polygon[j],
+          polygon[(j + 1) % polygon.length],
+        )
+        if (value) {
+          touches.push(value)
+        }
+      }
+    }
+
     if (touches.length === 0) {
       return null
     } else {
@@ -51,13 +66,13 @@ class Sensor {
     }
   }
 
-  update(roadBorders) {
+  update(roadBorders, traffic) {
     this.#castRays()
 
     this.readings = []
     for (let i = 0; i < this.rays.length; ++i) {
       this.readings.push(
-        this.#getReading(this.rays[i], roadBorders)
+        this.#getReading(this.rays[i], roadBorders, traffic)
       )
     }
   }
