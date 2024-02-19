@@ -152,7 +152,7 @@ class Car {
 
     ctx.save()
     ctx.translate(this.x, this.y)
-    ctx.rotate(-this, this.angle)
+    ctx.rotate(-this.angle)
     if (!this.damaged) {
       ctx.drawImage(this.mask, -this.width / 2, -this.height / 2, this.width, this.height)
       ctx.globalCompositeOperation = 'multiply'
